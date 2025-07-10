@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Preflight request (important!)
+  // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     return res.end();
@@ -35,6 +35,12 @@ const server = http.createServer((req, res) => {
       res.end(JSON.stringify({ status: 'received' }));
     });
     return;
+  }
+
+  // IMPORTANT: allow GTM Server to handle preview/debug traffic
+  if (pathname.startsWith('/gtm/')) {
+    res.writeHead(404);
+    return res.end('Not Found - GTM path should be handled by GTM runtime');
   }
 
   // Default response
