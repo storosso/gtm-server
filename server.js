@@ -23,8 +23,8 @@ const server = http.createServer((req, res) => {
     return res.end('OK');
   }
 
-  // Example: Endpoint for GTM or logging
-  if (pathname === '/collect') {
+  // GTM event collector
+  if (pathname === '/collect' || pathname === '/g/collect') {
     let body = '';
     req.on('data', chunk => {
       body += chunk;
@@ -38,4 +38,10 @@ const server = http.createServer((req, res) => {
   }
 
   // Default response
-  r
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('GTM Server Running');
+});
+
+server.listen(PORT, () => {
+  console.log(`🚀 GTM Server listening on port ${PORT}`);
+});
