@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight requests
+  // Handle preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     return res.end();
@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
     return res.end('OK');
   }
 
-  // GTM event collector
+  // Collect endpoints
   if (pathname === '/collect' || pathname === '/g/collect') {
     let body = '';
     req.on('data', chunk => {
@@ -37,13 +37,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // IMPORTANT: allow GTM Server to handle preview/debug traffic
+  // Allow GTM to handle preview/debug
   if (pathname.startsWith('/gtm/')) {
-    res.writeHead(404);
-    return res.end('Not Found - GTM path should be handled by GTM runtime');
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    return res.end('Preview OK');
   }
 
-  // Default response
+  // Default
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('GTM Server Running');
 });
